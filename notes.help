@@ -1,0 +1,4 @@
+server saves name in sinfo.lua
+when create an instance reference this name to know what config to grab, the diorectory will be called THAT NAME
+SERVER NAMES ARE NOT OPTIONALY CHOSEN ANYMORE, PICK FROM A LIST OF AVAILABLE SERVERS
+however instance and version names are free range

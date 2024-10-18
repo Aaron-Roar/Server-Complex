@@ -91,8 +91,8 @@ local function main()
   ----------------------------------------------------------------------------------------
 
   if result.success then
-    --os.execute("cat <<'EOF'\n" .. tostring(result.output) .. "\nEOF")
-    os.execute(tostring(result.output))
+    os.execute("cat <<'EOF'\n" .. tostring(result.output) .. "\nEOF")
+    --os.execute(tostring(result.output))
   else
     print(result.msg)
   end

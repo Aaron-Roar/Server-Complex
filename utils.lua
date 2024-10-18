@@ -73,9 +73,9 @@ function utils.tableToString(table, space)
     local s = "" .. '{\n'
     for k,v in pairs(table) do
       if type(v) == 'table' then
-        s = s .. space .. k .. " = " .. tableToString(v, "" .. space .. "  ") .. ",\n"
+        s = s .. space .. k .. " = " .. utils.tableToString(v, "" .. space .. "  ") .. ",\n"
       else
-        s = s .. space .. k ..' = \"' .. tableToString(v) .. '\",\n'
+        s = s .. space .. k ..' = \"' .. utils.tableToString(v) .. '\",\n'
       end
     end
     return s .. space:gsub("  ", "", 1) ..  '}'

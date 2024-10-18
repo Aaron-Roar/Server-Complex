@@ -77,6 +77,10 @@ function instance.call(command, server_name, version_name, instance_name)
     local script_mkdir = "mkdir -p " .. instance_dir 
     local script_mkinfo = writeInstanceInfo(instance_dir, genInstanceInfo(instance_info))
 
+    package.path = ";" .. config.server_dir .. server_name .. "/?.lua"
+    local sinfo = require "sinfo"
+    local script_cp_config = "cp ./instances/" .. sinfo.name .. "/default.lua " .. instance_dir .. "/lconfig.lua"
+
     local instance_specific = zomboid.add(instance_dir)
 
     if server_name == nil or version_name == nil or instance_name == nil then
@@ -96,7 +100,7 @@ function instance.call(command, server_name, version_name, instance_name)
     end
 
     return {
-      output = script_mkdir .. ";" .. script_mkinfo .. instance_specific,
+      output = script_mkdir .. ";" .. script_mkinfo .. "\n;" .. script_cp_config .. ";" .. instance_specific,
       success = true,
       msg = ""
     }

@@ -33,7 +33,7 @@ function server.call(command, server_name)
     local server_info = {
       name = tostring(name),
     }
-    local script_write_info = writeServerInfo(path, utils.tableToString(server_info))
+    local script_write_info = writeServerInfo(path, genServerInfo(server_info))
 
     if name == nil or name == "" then
       return {

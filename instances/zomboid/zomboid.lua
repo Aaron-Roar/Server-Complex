@@ -71,8 +71,8 @@ local myTable = {
 }
 
 function zomboid.add(instance_dir)
-  local script_cp_config = "cp ./instances/zomboid/default.lua " .. instance_dir .. "/" .. "lconfig.lua"
-  return script_cp_config
+  local example = "echo 'Hello From Zomboid.lua'"
+  return example
 end
 
 --local output = writeConfig("./", makeConfig(myTable, lconfig))
