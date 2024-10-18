@@ -22,6 +22,9 @@ function server.call(command, server_name)
   ---Delete---
   server del <server name>
 
+  ---List---
+  server list
+
   ---Help---
   server help
   ]]
@@ -50,6 +53,15 @@ function server.call(command, server_name)
         msg = "[!]Game Already Set Up"
       }
     else
+
+    if utils.pathExists("./instances/" .. name) == false then
+        return {
+          output = "",
+          success = false,
+          msg = "[!]This server type does not exist in your server-complex repository\nTry using 'server list' to see available servers"
+        }
+    end
+
       return {
         output = "" .. script_mkdir .. ";" .. script_info .. ";" .. script_write_info, true, "",
         success = true,
@@ -89,6 +101,15 @@ function server.call(command, server_name)
     end
   end
 
+  local function list()
+    local script_ls = "ls ./instances/"
+    return {
+      output = script_ls,
+      success = true,
+      msg = ""
+    }
+  end
+
   local function help()
     return {
       output = "",
@@ -102,6 +123,8 @@ function server.call(command, server_name)
     return add(server_name)
   elseif command == "del" then
     return del(server_name)
+  elseif command == "list" then
+    return list()
   else
     return help()
   end

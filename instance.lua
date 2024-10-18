@@ -100,7 +100,7 @@ function instance.call(command, server_name, version_name, instance_name)
     end
 
     return {
-      output = script_mkdir .. ";" .. script_mkinfo .. "\n;" .. script_cp_config .. ";" .. instance_specific,
+      output = script_mkdir .. ";" .. script_mkinfo .. script_cp_config .. ";" .. instance_specific,
       success = true,
       msg = ""
     }
