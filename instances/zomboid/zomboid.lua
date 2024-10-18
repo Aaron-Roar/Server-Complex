@@ -2,7 +2,7 @@
 --Most of the "configuration" code should go to general instances and not this
 
 --Load Config
-local lconfig = require"lconfig"
+local lconfig =""-- require"lconfig"
 
 local zomboid = {}
 
@@ -38,12 +38,13 @@ fi
 exit 0
 ]]
 
+
 local JavaFlags = {
   std = " %s",
   mem_max = " -Xmx%s",
   mem_min = " -Xms%s",
   steam = " -Dzomboid.steam=%s",
-  debug = ""
+  home = " -Duser.home=%s"
 }
 
 local ShellFlags = {
@@ -52,65 +53,11 @@ local ShellFlags = {
   adminpass = " -adminpassword %s",
   name = " -servername %s",
   port = " -port %s",
-  udpport = "- udpport %s",
-  steamvac = "-steamvac %s",
+  udpport = " -udpport %s",
+  steamvac = " -steamvac %s",
   debug = ""
 }
 
---Generate the config to output in shell and return it
-local function tableToString(table, space)
-  if type(table) == 'table' then
-    local s = "" .. '{\n'
-    for k,v in pairs(table) do
-      if type(v) == 'table' then
-        s = s .. space .. k .. " = " .. tableToString(v, "" .. space .. "  ") .. ",\n"
-      else
-        s = s .. space .. k ..' = \"' .. tableToString(v) .. '\",\n'
-      end
-    end
-    return s .. space:gsub("  ", "", 1) ..  '}'
-  else
-    return tostring(table)
-  end
-end
-
-local function genConfig(table)
-return "lconfig = " .. tableToString(table, "  ") .. "\nreturn lconfig"
-end
-
-local function genFlags(prefix, input)
-  local output = ""
-  for key,_ in pairs(prefix) do
-    if input[key] ~= "" and type(input[key]) == 'string' then
-      output = output .. string.format(prefix[key], input[key])
-    else
-      print("[?]Config Missing Property: " .. key .. "\n")
-    end
-  end
-  return output
-end
-
-
---
-local function makeConfig(arg_table, lconf)
-  for key,value in pairs(arg_table) do
-    if lconf.JavaFlags[key] ~= nil then
-      lconf.JavaFlags[key] = value
-    end
-  end
-
-  for key,value in pairs(arg_table) do
-    if lconf.ShellFlags[key] ~= nil then
-      lconf.ShellFlags[key] = value
-    end
-  end
-
-  return genConfig(lconf)
-end
-
-local function writeConfig(instance_dir, lstring)
-  return [[cat << 'EOF' > ]] .. instance_dir .. [[lconfig.lua]] .. "\n" .. lstring .. "\n" .. [[EOF]]
-end
 
 
 --Modify Config
@@ -123,8 +70,13 @@ local myTable = {
   steam = "200",
 }
 
-local output = writeConfig("./", makeConfig(myTable, lconfig))
-os.execute(output)
+function zomboid.add(instance_dir)
+  local script_cp_config = "cp ./instances/zomboid/default.lua " .. instance_dir .. "/" .. "lconfig.lua"
+  return script_cp_config
+end
+
+--local output = writeConfig("./", makeConfig(myTable, lconfig))
+--os.execute(output)
 --print(output)
 --Update Config
 

@@ -30,7 +30,7 @@ function version.call(command, server_name, version_name, appid)
   local function add(game, version_name, appid)
     local path = "" .. tostring(config.server_dir) .. tostring(game) .. "/server-versions/" .. tostring(version_name) .. "/"
     local script_mkdir = "mkdir -p " .. path .. "version-files/"
-    local info = [[appid:"]] .. tostring(appid) .. [["\nversion:"]] .. version_name .. [["]]
+    local info = [[appid:"]] .. tostring(appid) .. [[";version:"]] .. version_name .. [["]]
     local script_info = "touch " .. path .. [[version.info; echo ']] .. info .. [[' >> ]] .. path .. "version.info"
     local script_steamcmd = "steamcmd +force_install_dir " .. path .. "version-files/" .. " +login " .. tostring(config.uname) .. " " .. tostring(config.passwd) .. " +app_update " .. tostring(appid) .. " validate +quit"
 

@@ -67,5 +67,39 @@ function utils.getGameName(appid)
   return getGameInfo(appid)
 end
 
+--Turns a table into a string representaiton
+function utils.tableToString(table, space)
+  if type(table) == 'table' then
+    local s = "" .. '{\n'
+    for k,v in pairs(table) do
+      if type(v) == 'table' then
+        s = s .. space .. k .. " = " .. tableToString(v, "" .. space .. "  ") .. ",\n"
+      else
+        s = s .. space .. k ..' = \"' .. tableToString(v) .. '\",\n'
+      end
+    end
+    return s .. space:gsub("  ", "", 1) ..  '}'
+  else
+    return tostring(table)
+  end
+end
+
+--Make modifications to an existing config in memory
+function utils.makeConfig(arg_table, lconf)
+  for key,value in pairs(arg_table) do
+    if lconf.JavaFlags[key] ~= nil then
+      lconf.JavaFlags[key] = value
+    end
+  end
+
+  for key,value in pairs(arg_table) do
+    if lconf.ShellFlags[key] ~= nil then
+      lconf.ShellFlags[key] = value
+    end
+  end
+
+  return lconf
+end
+
 return utils
 

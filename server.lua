@@ -3,6 +3,14 @@ local utils = require "utils"
 
 local server = {}
 
+local function genServerInfo(table)
+  return "sinfo = " .. utils.tableToString(table, "  ") .. "\n return sinfo"
+end
+
+local function writeServerInfo(server_dir, lstring)
+  return [[cat << 'EOF' > ]] .. server_dir .. [[/sinfo.lua]] .. "\n" .. lstring .. "\n" .. [[EOF]] .. "\n"
+end
+
 function server.call(command, server_name)
   ---Variables---
   local server_help = [[
@@ -21,7 +29,11 @@ function server.call(command, server_name)
   local function add(name)
     local path = "" .. tostring(config.server_dir) .. tostring(name) .. "/"
     local script_mkdir = "mkdir -p " .. path
-    local script_info = "touch " .. path .. "server.info"
+    local script_info = "touch " .. path .. "sinfo.lua"
+    local server_info = {
+      name = tostring(name),
+    }
+    local script_write_info = writeServerInfo(path, utils.tableToString(server_info))
 
     if name == nil or name == "" then
       return {
@@ -39,7 +51,7 @@ function server.call(command, server_name)
       }
     else
       return {
-        output = "" .. script_mkdir .. ";" .. script_info, true, "",
+        output = "" .. script_mkdir .. ";" .. script_info .. ";" .. script_write_info, true, "",
         success = true,
         msg = ""
       }
