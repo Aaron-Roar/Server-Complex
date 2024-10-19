@@ -3,7 +3,7 @@ local config = require "config"
 
 local version = {}
 
-function version.call(command, server_name, version_name, appid)
+function version.call(command, inputs)
   --Variables
   local version_help = [[
   Version help message
@@ -94,8 +94,13 @@ function version.call(command, server_name, version_name, appid)
   end
 
   if command == "add" then
+    local server_name = inputs[1]
+    local version_name = inputs[2]
+    local appid = inputs[3]
     return add(server_name, version_name, appid)
   elseif command == "del" then
+    local server_name = inputs[1]
+    local version_name = inputs[2]
     return del(server_name, version_name)
   else
     return help()

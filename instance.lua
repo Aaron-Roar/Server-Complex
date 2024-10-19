@@ -35,7 +35,7 @@ local function writeInstanceInfo(instance_dir, lstring)
   return [[cat << 'EOF' > ]] .. instance_dir .. [[/iinfo.lua]] .. "\n" .. lstring .. "\n" .. [[EOF]] .. "\n"
 end
 
-function instance.call(command, server_name, version_name, instance_name)
+function instance.call(command, inputs)
   local instance_help = [[
   Instance help message
 
@@ -107,7 +107,17 @@ function instance.call(command, server_name, version_name, instance_name)
   end
 
   --Sets the config values based on input
-  local function set()
+  local function set(server_name, version_name, instance_name)
+    local instance_dir = "" .. config.server_dir .. server_name .. "/instances/" .. instance_name
+
+    package.path = ";" .. instance_dir .. "/?.lua"
+    local lconfig = require "lconfig"
+    
+    return {
+      output = "",
+      success = true,
+      msg = tostring(lconfig.name)
+    }
   end
 
   --Deletes the instance and all data
@@ -116,6 +126,7 @@ function instance.call(command, server_name, version_name, instance_name)
 
   --Starts the instance based on the config
   local function start()
+
   end
 
   --Stops the instance
@@ -124,6 +135,9 @@ function instance.call(command, server_name, version_name, instance_name)
 
 
   if command == "add" then
+    local server_name = inputs[1]
+    local version_name = inputs[2]
+    local instance_name = inputs[3]
     return add(server_name, version_name, instance_name)
   elseif command == "del" then
     return del()
@@ -131,6 +145,11 @@ function instance.call(command, server_name, version_name, instance_name)
     return start()
   elseif command == "stop" then
     return stop()
+  elseif command == "set" then
+    local server_name = inputs[1]
+    local version_name = inputs[2]
+    local instance_name = inputs[3]
+    return set(server_name, version_name, instance_name)
   else
     return help()
   end

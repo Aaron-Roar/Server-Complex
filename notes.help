@@ -1,1 +1,20 @@
-build the run for zomboid
+          XDG Standard
+---------------------------------------
+.config/server-complex/zombie-fun/
+.config/server-complex/aarons-world/
+.local/state/server-complex/zombie-fun/
+.local/state/server-complex/aarons-world/
+
+Crappy database to store info about instances
+----------------------------------
+{
+  zombie-fun = {
+    verison = v1.1
+    name = blah
+  }
+}
+
+Method of Running Processes and killing them
+----------------------------------------
+https://github.com/NixOS/nixpkgs/blob/master/pkgs/build-support/setup-hooks/make-wrapper.sh
+

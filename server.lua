@@ -11,7 +11,7 @@ local function writeServerInfo(server_dir, lstring)
   return [[cat << 'EOF' > ]] .. server_dir .. [[/sinfo.lua]] .. "\n" .. lstring .. "\n" .. [[EOF]] .. "\n"
 end
 
-function server.call(command, server_name)
+function server.call(command, inputs)
   ---Variables---
   local server_help = [[
   Server help message
@@ -119,6 +119,7 @@ function server.call(command, server_name)
   end
   ---
 
+  local server_name = inputs[1]
   if command == "add" then
     return add(server_name)
   elseif command == "del" then

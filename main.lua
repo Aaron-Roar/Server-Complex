@@ -58,31 +58,30 @@ end
 Arguments = {
   type = "",
   command = "",
-  server_name = "",
-  version_name = "",
-  instance_name = "",
-  appid = "",
-  help = ""
+  input = {},
 }
 
+local function popList(pop_amount, in_list)
+  local out_list = {}
+  for i=pop_amount + 1,#in_list do
+    table.insert(out_list, in_list[i])
+  end
+  return out_list
+end
+
 local function main()
+  local result
   Arguments.type = arg[1]
   Arguments.command = arg[2]
-  local result
+
+  local list = popList(2, arg)
 
   if Arguments.type == "server" then
-    Arguments.server_name = arg[3]
-    result = server.call(Arguments.command, Arguments.server_name)
+    result = server.call(Arguments.command, list)
   elseif Arguments.type == "version" then
-    Arguments.server_name = arg[3]
-    Arguments.version_name = arg[4]
-    Arguments.appid = arg[5]
-    result = version.call(Arguments.command, Arguments.server_name, Arguments.version_name, Arguments.appid)
+    result = version.call(Arguments.command, list)
   elseif Arguments.type == "instance" then
-    Arguments.instance_name = arg[3]
-    Arguments.server_name = arg[4]
-    Arguments.version_name = arg[5]
-    result = instance.call(Arguments.command, Arguments.instance_name, Arguments.server_name, Arguments.version_name)
+    result = instance.call(Arguments.command, list)
   else
     Arguments.type = "help"
     result = main_help()
@@ -91,8 +90,8 @@ local function main()
   ----------------------------------------------------------------------------------------
 
   if result.success then
-    --os.execute("cat <<'ABCDEFG'\n" .. tostring(result.output) .. "\nABCDEFG")
-    os.execute(tostring(result.output))
+    os.execute("cat <<'ABCDEFG'\n" .. tostring(result.output) .. "\nABCDEFG")
+    --os.execute(tostring(result.output))
   else
     print(result.msg)
   end
